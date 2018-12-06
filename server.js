@@ -4,7 +4,8 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 const multer = require('multer'); // v1.0.5
-const upload = multer(); // for parsing multipart/form-data
+const upload = multer({dest:'/uploads'}); 
+// for parsing multipart/form-data
 
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
@@ -16,9 +17,11 @@ app.use(function (req, res, next) {
 
 
 
-app.post('/stt',upload, function (req, res) {
+app.post('/stt',upload.single(), function (req, res) {
 
    
+
+    
 });
 
 
