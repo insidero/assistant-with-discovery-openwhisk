@@ -117,6 +117,15 @@ class App extends Component {
   }
 
 
+
+  startRecording(){
+    console.log("recording start");
+  }
+
+
+  stopRecording(){
+    console.log("recording stop");
+  }
   render() {
     return (
       <div className="app-wrapper">
@@ -126,6 +135,8 @@ class App extends Component {
         <Conversation
           onSubmit={this.handleSubmit}
           messageObjectList={this.state.messageObjectList}
+          startRecording={this.startRecording}
+          stopRecording={this.stopRecording}
         />
       </div>
     );

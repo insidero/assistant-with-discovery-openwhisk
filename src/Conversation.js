@@ -27,7 +27,9 @@ function Conversation(props) {
       </div>
       <div className="conversation__input-container">
         <InputWithButton className="conversation__input" onSubmit={props.onSubmit} placeholder="Say something to Watson."/>
-        <Button >hi</Button>
+        <button 
+        onMouseDown={props.startRecording}
+        onMouseUp={props.stopRecording}>hi</button>
       </div>
       <div className="conversation__disclaimer--message">
         
