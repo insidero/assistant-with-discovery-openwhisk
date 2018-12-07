@@ -19,6 +19,7 @@ class App extends Component {
   }
 
   callWatson(message) {
+    console.log("calling watsons");
     const watsonApiUrl = process.env.REACT_APP_API_URL;
     const requestJson = JSON.stringify({
       input: {
