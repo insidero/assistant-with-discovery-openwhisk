@@ -34,7 +34,7 @@ function Conversation(props) {
 
          <AudioRecorder 
          downloadable: true
-         filename: 'audio.wav'
+         filename: audio.wav
          onChange={props.onChange}
          />
       </div>
