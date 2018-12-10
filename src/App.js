@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Conversation from './Conversation.js';
 import DiscoveryResult from './DiscoveryResult.js';
+import AudioRecorder from 'react-audio-recorder';
 
 class App extends Component {
   constructor(props) {
@@ -126,7 +127,12 @@ class App extends Component {
   stopRecording(){
     console.log("recording stop");
   }
-  render() {
+
+  onChange(){
+    console.log('looging OnChange');
+  }
+
+ render() {
     return (
       <div className="app-wrapper">
         <p className="conversation__intro">
@@ -137,6 +143,7 @@ class App extends Component {
           messageObjectList={this.state.messageObjectList}
           startRecording={this.startRecording}
           stopRecording={this.stopRecording}
+          onChange={this.onChange}
         />
       </div>
     );

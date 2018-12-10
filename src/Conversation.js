@@ -33,8 +33,8 @@ function Conversation(props) {
          }>hi</button>
 
          <AudioRecorder 
-         downloadable: true,
-         filename: 'audio.wav',
+         downloadable: true
+         filename: 'audio.wav'
          onChange={props.onChange}
          />
       </div>
