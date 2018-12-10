@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Conversation from './Conversation.js';
 import DiscoveryResult from './DiscoveryResult.js';
-import AudioRecorder from 'react-audio-recorder';
+import Recorder from 'react-recorder'
 
 class App extends Component {
   constructor(props) {
@@ -128,8 +128,8 @@ class App extends Component {
     console.log("recording stop");
   }
 
-  onChange(){
-    console.log('looging OnChange');
+  onStop = (blob) => {
+    // Do something with the blob file of the recording
   }
 
  render() {

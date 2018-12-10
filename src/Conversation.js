@@ -2,7 +2,7 @@ import React from 'react';
 import './Conversation.css';
 import { InputWithButton } from 'watson-react-components';
 import Message from './Message.js';
-import AudioRecorder from 'react-audio-recorder';
+import Recorder from 'react-recorder'
 function Conversation(props) {
 
   function makeMessage(msgObj, index) {
@@ -32,10 +32,10 @@ function Conversation(props) {
         onMouseUp={props.stopRecording
          }>hi</button>
 
-         <AudioRecorder 
-        
-         onChange={props.onChange}
-         />
+        <div>
+    <Recorder onStop={props.onStop}
+   />
+  </div>
       </div>
       <div className="conversation__disclaimer--message">
         
