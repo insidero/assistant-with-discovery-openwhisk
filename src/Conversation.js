@@ -2,7 +2,7 @@ import React from 'react';
 import './Conversation.css';
 import { InputWithButton } from 'watson-react-components';
 import Message from './Message.js';
-
+import AudioRecorder from 'react-audio-recorder';
 function Conversation(props) {
 
   function makeMessage(msgObj, index) {
@@ -29,7 +29,14 @@ function Conversation(props) {
         <InputWithButton className="conversation__input" onSubmit={props.onSubmit} placeholder="Say something to Watson."/>
         <button 
         onMouseDown={props.startRecording}
-        onMouseUp={props.stopRecording}>hi</button>
+        onMouseUp={props.stopRecording
+         }>hi</button>
+
+         <AudioRecorder 
+         downloadable: true,
+         filename: 'audio.wav',
+         onChange={props.onChange}
+         />
       </div>
       <div className="conversation__disclaimer--message">
         
