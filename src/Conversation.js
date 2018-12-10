@@ -33,8 +33,7 @@ function Conversation(props) {
          }>hi</button>
 
          <AudioRecorder 
-         downloadable: true
-      
+        
          onChange={props.onChange}
          />
       </div>
