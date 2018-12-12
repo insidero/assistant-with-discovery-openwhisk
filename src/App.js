@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import Conversation from './Conversation.js';
 import DiscoveryResult from './DiscoveryResult.js';
-import Recorder from 'react-recorder'
+import { ReactMic } from 'react-mic';
+import axios from 'axios';
+
+// import Recorder from 'react-recorder2';
 
 class App extends Component {
   constructor(props) {
@@ -12,13 +15,71 @@ class App extends Component {
       context: {},
       // A Message Object consists of a message[, intent, date, isUser]
       messageObjectList: [],
-      discoveryNumber: 0
+      discoveryNumber: 0,
+      isRecording: false,
+      blobObject: null
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.callWatson('hello');
   }
 
+  startRecording= () => {
+
+    this.setState({
+      isRecording: true
+    });
+  }
+
+  stopRecording= () => {
+    this.setState({
+      isRecording: false
+    });
+  }
+
+  onSave=(blobObject) => {
+  }
+
+  onStart=() => {
+    console.log('You can tap into the onStart callback');
+  }
+
+  onStop= (blobObject) => {
+    this.setState({
+      blobURL : blobObject.blobURL
+    });
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', blobObject.blobURL, true);
+    xhr.responseType = 'blob';
+
+    var parentThis=this;
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+        var myBlob = this.response;
+        // myBlob is now the blob that the object URL pointed to.
+        console.log(myBlob);
+        let formData = new FormData(); 
+        formData.append('audioFile', myBlob);
+
+        axios.post('http://localhost:5000/speechtotext', formData
+        ).then(function(response){
+          console.log('response from STT--  ',response);
+
+        }).catch(function(error){
+          console.log(error);
+        })
+
+      }
+    };
+    xhr.send();
+
+
+  }
+
+  onData(recordedBlob){
+    console.log('chunk of real-time data is: ', recordedBlob);
+  }
   callWatson(message) {
     console.log("calling watsons");
     const watsonApiUrl = process.env.REACT_APP_API_URL;
@@ -119,31 +180,26 @@ class App extends Component {
 
 
 
-  startRecording(){
-    console.log("recording start");
-  }
 
 
-  stopRecording(){
-    console.log("recording stop");
-  }
-
-  onStop = (blob) => {
-    // Do something with the blob file of the recording
-  }
-
+  
  render() {
+   console.log('STATE',this.state);
     return (
       <div className="app-wrapper">
-        <p className="conversation__intro">
-                    This demo shows how the Watson Assistant service calls the Discovery service when it does not know how to respond. The calls to Watson Assistant and Discovery are made in OpenWhisk, IBM's serverless platform.
-        </p>
+        
         <Conversation
           onSubmit={this.handleSubmit}
           messageObjectList={this.state.messageObjectList}
           startRecording={this.startRecording}
           stopRecording={this.stopRecording}
-          onChange={this.onChange}
+        //  onStop={this.onStop}
+         onStop={this.onStop}
+         onStart={this.onStart}
+         onSave={this.onSave}
+         onData={this.onData}
+
+        isRecording={this.state.isRecording}
         />
       </div>
     );

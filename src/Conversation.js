@@ -2,7 +2,13 @@ import React from 'react';
 import './Conversation.css';
 import { InputWithButton } from 'watson-react-components';
 import Message from './Message.js';
-import Recorder from 'react-recorder'
+
+import { FloatingActionButton, MuiThemeProvider } from 'material-ui';
+import MicrophoneOn from 'material-ui/svg-icons/av/mic';
+import MicrophoneOff from 'material-ui/svg-icons/av/stop';
+import { ReactMic } from 'react-mic';
+
+
 function Conversation(props) {
 
   function makeMessage(msgObj, index) {
@@ -27,20 +33,41 @@ function Conversation(props) {
       </div>
       <div className="conversation__input-container">
         <InputWithButton className="conversation__input" onSubmit={props.onSubmit} placeholder="Say something to Watson."/>
-        <button 
-        onMouseDown={props.startRecording}
-        onMouseUp={props.stopRecording
-         }>hi</button>
-
+        <MuiThemeProvider>
         <div>
-    <Recorder onStop={props.onStop}
-   />
+        
+          <ReactMic
+            className="oscilloscope"
+            record={props.isRecording}
+            audioBitsPerSecond= {128000}
+            onStop={props.onStop}
+            onStart={props.onStart}
+            onSave={props.onSave}
+      />
+         
+         
+          <br />
+          <FloatingActionButton
+            className="btn"
+            secondary={true}
+            disabled={props.isRecording}
+            onClick={props.startRecording}>
+            <MicrophoneOn />
+          </FloatingActionButton>
+          <FloatingActionButton
+            className="btn"
+            secondary={true}
+            disabled={!props.isRecording}
+            onClick={props.stopRecording}>
+            <MicrophoneOff />
+          </FloatingActionButton>
+          </div>
+    </MuiThemeProvider>
+   
   </div>
       </div>
-      <div className="conversation__disclaimer--message">
-        
-      </div>
-    </div>
+     
+
   );
 }
 
