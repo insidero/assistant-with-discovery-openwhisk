@@ -52,7 +52,7 @@ class App extends Component {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', blobObject.blobURL, true);
     xhr.responseType = 'blob';
-
+    console.log(blobObject.blobURL);
     var parentThis=this;
     xhr.onload = function(e) {
       if (this.status == 200) {
@@ -61,11 +61,13 @@ class App extends Component {
         console.log(myBlob);
         let formData = new FormData(); 
         formData.append('audioFile', myBlob);
-
+        
+        
         axios.post('http://localhost:5000/speechtotext', formData
         ).then(function(response){
-          console.log('response from STT--  ',response);
-
+          console.log('response from STT--  ',response.data);
+          
+          parentThis.handleSubmit(''+response.data);
         }).catch(function(error){
           console.log(error);
         })
@@ -143,7 +145,16 @@ class App extends Component {
   }
 
   handleSubmit(e) {
-    const inputMessage = e.target.value;
+    var inputMessage='';
+    if (typeof e ==='string')
+    {
+      console.log(e);
+      // e.target.value=e;
+       inputMessage=e;
+    }else{
+     inputMessage =e.target.value;
+    }
+   
     const inputDate = new Date();
     const formattedDate = inputDate.toLocaleTimeString();
     const msgObj = {
@@ -153,7 +164,15 @@ class App extends Component {
       hasTail: true
     };
     this.addMessage(msgObj);
-    e.target.value = '';
+    // e.target.value= '';
+    if (typeof e ==='string')
+    {
+      e='';
+      // e.target.value=e;
+     
+    }else{
+      e.target.value='';
+    }
     this.callWatson(inputMessage);
   }
 
