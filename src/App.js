@@ -147,6 +147,9 @@ class App extends Component {
   handleSubmit(e) {
     var inputMessage='';
     if (typeof e ==='string')
+
+
+    
     {
       console.log(e);
       // e.target.value=e;
