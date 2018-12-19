@@ -1,8 +1,8 @@
 $result-background-color: rgb(242, 242, 242);
-$result-title-color: rgb(86, 47, 114);
-$result-preview-color: rgb(86, 47, 114);
-$result-link-color: rgb(186, 143, 247);
-$result-border-color: rgb(86, 47, 114);
+$result-title-color: rgb(100, 120, 236);
+$result-preview-color: rgb(100, 120, 236);
+$result-link-color: rgb(19, 30, 179);
+$result-border-color: rgb(100, 120, 236);
 
 .result {
     background-color: $result-background-color;
@@ -23,7 +23,6 @@ $result-border-color: rgb(86, 47, 114);
         color: $result-link-color;
     }
 }
-
 .result + .result {
     margin-top: 0rem;
     border-top: none;

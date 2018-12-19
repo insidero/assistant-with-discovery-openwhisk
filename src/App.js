@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Conversation from './Conversation.js';
 import DiscoveryResult from './DiscoveryResult.js';
-import { ReactMic } from 'react-mic';
+// import { ReactMic } from 'react-mic';
 import axios from 'axios';
 
 // import Recorder from 'react-recorder2';
@@ -55,7 +55,7 @@ class App extends Component {
     console.log(blobObject.blobURL);
     var parentThis=this;
     xhr.onload = function(e) {
-      if (this.status == 200) {
+      if (this.status === 200) {
         var myBlob = this.response;
         // myBlob is now the blob that the object URL pointed to.
         console.log(myBlob);
@@ -122,17 +122,28 @@ class App extends Component {
     } else {
       const outputMessage = responseJson.output.text.filter(text => text).join('\n');
       const outputIntent = responseJson.intents[0] ? responseJson.intents[0]['intent'] : '';
+      // var link='';
+      // var hasLink=false;
+      // if (outputIntent==='sale'){
+      //   link= 'https://graana.com/search?purpose=sale';
+      //   hasLink=true;
+      // }else if (outputIntent==='rent'){
+      //   link= 'https://graana.com/search?purpose=rent';
+      //   hasLink=true;
+      // }
       const outputDate = responseJson.date.toLocaleTimeString();
       const outputContext = responseJson.context;
+      const outputMessageWithLink = outputMessage;
       this.setState({
         context: outputContext
       });
       const msgObj = {
         position: 'left',
         label: outputIntent,
-        message: outputMessage,
+        message: outputMessageWithLink,
+        // link: hasLink,
         date: outputDate,
-        hasTail: true
+        // hasTail: true
       };
       this.addMessage(msgObj);
     }
@@ -147,13 +158,10 @@ class App extends Component {
   handleSubmit(e) {
     var inputMessage='';
     if (typeof e ==='string')
-
-
-    
     {
       console.log(e);
       // e.target.value=e;
-       inputMessage=e;
+      inputMessage=e;
     }else{
      inputMessage =e.target.value;
     }
@@ -172,7 +180,7 @@ class App extends Component {
     {
       e='';
       // e.target.value=e;
-     
+
     }else{
       e.target.value='';
     }
@@ -200,11 +208,6 @@ class App extends Component {
     this.scrollToBottom();
   }
 
-
-
-
-
-  
  render() {
    console.log('STATE',this.state);
     return (

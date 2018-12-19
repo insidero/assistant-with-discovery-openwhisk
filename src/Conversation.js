@@ -2,7 +2,6 @@ import React from 'react';
 import './Conversation.css';
 import { InputWithButton } from 'watson-react-components';
 import Message from './Message.js';
-
 import { FloatingActionButton, MuiThemeProvider } from 'material-ui';
 import MicrophoneOn from 'material-ui/svg-icons/av/mic';
 import MicrophoneOff from 'material-ui/svg-icons/av/stop';
@@ -15,7 +14,7 @@ function Conversation(props) {
 
     if (typeof msgObj.message === 'string') {
       return (
-        <Message key={index} position={msgObj.position || false} label={msgObj.label || false} date={msgObj.date || false} message={msgObj.message} hasTail={msgObj.hasTail || false}/>
+        <Message key={index} position={msgObj.position || false} label={msgObj.label || false} date={msgObj.date || false} message={msgObj.message} hasTail={msgObj.hasTail || false} link={msgObj.link || false}/>
       );
     } else if ( React.isValidElement(msgObj.message)) {
       return ( msgObj.message );
@@ -32,10 +31,9 @@ function Conversation(props) {
         </div>
       </div>
       <div className="conversation__input-container">
-        <InputWithButton className="conversation__input" onSubmit={props.onSubmit} placeholder="Say something to Watson."/>
+        <InputWithButton className="conversation__input" onSubmit={props.onSubmit} placeholder="Say something to Aira."/>
         <MuiThemeProvider>
         <div>
-        
           <ReactMic
             className="oscilloscope"
             record={props.isRecording}
@@ -43,9 +41,8 @@ function Conversation(props) {
             onStop={props.onStop}
             onStart={props.onStart}
             onSave={props.onSave}
+            height="100"
       />
-         
-         
           <br />
           <FloatingActionButton
             className="btn"
@@ -63,11 +60,8 @@ function Conversation(props) {
           </FloatingActionButton>
           </div>
     </MuiThemeProvider>
-   
   </div>
       </div>
-     
-
   );
 }
 
