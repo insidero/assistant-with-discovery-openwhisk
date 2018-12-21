@@ -115,14 +115,21 @@ class App extends Component {
   }
 
   handleResponse(responseJson) {
+    console.log('response from Assistant ',responseJson);
     if (responseJson.hasOwnProperty('output') && responseJson.output.hasOwnProperty('action') && responseJson.output.action.hasOwnProperty('call_discovery')) {
       this.addMessage( { label: 'Discovery Result:', message: 'Great question. Here\'s what I found:', date: (new Date()).toLocaleTimeString()});
       this.formatDiscovery(responseJson.output.discoveryResults);
+      console.log('response from Assistant + Discovery ',responseJson);
 
     } else {
+      console.log('response from Assistant ',responseJson);
       const outputMessage = responseJson.output.text.filter(text => text).join('\n');
       const outputIntent = responseJson.intents[0] ? responseJson.intents[0]['intent'] : '';
-      // var link='';
+      var hasLink=false;
+      console.log('response from Assistant ',responseJson);
+      if (outputMessage.indexOf('<a')!==-1){
+        hasLink=true;
+      }
       // var hasLink=false;
       // if (outputIntent==='sale'){
       //   link= 'https://graana.com/search?purpose=sale';
@@ -141,7 +148,7 @@ class App extends Component {
         position: 'left',
         label: outputIntent,
         message: outputMessageWithLink,
-        // link: hasLink,
+        link: hasLink,
         date: outputDate,
         // hasTail: true
       };
