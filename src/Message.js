@@ -2,10 +2,12 @@ import React from 'react';
 import './Message.css';
 
 function openInNewTab(url) {
-  var win = window.open(url, '_blank');
-  // win.focus();
+  var win =  window.open(url, '_blank');
+  //  var win =
+   win.focus();
 }
 function Message(props) {
+  console.log("MESAGE PROPS: ", props)
 
   var indexLinkStart = props.message.indexOf('<a');
   var indexLinkEnd = props.message.indexOf('a>');
@@ -17,7 +19,8 @@ function Message(props) {
   console.log(myLink);
   var myMessage= indexLinkStart!== -1 ? myMessageA+myMessageB: myMessageA;
 
-if(props.link){
+if(props.link && props.isLast){
+  // props.link='';
   var urlStartIndex = props.message.indexOf('href="');
   var urlEndIndex = props.message.indexOf('" target');
   var myURL = props.message.slice(urlStartIndex+6, urlEndIndex);

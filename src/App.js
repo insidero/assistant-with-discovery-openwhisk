@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Conversation from './Conversation.js';
 import DiscoveryResult from './DiscoveryResult.js';
-// import { ReactMic } from 'react-mic';
 import axios from 'axios';
-
-// import Recorder from 'react-recorder2';
 
 class App extends Component {
   constructor(props) {
@@ -24,14 +21,14 @@ class App extends Component {
     this.callWatson('hello');
   }
 
-  startRecording= () => {
+  startRecording = () => {
 
     this.setState({
       isRecording: true
     });
   }
 
-  stopRecording= () => {
+  stopRecording = () => {
     this.setState({
       isRecording: false
     });
@@ -115,7 +112,7 @@ class App extends Component {
   }
 
   handleResponse(responseJson) {
-    console.log('response from Assistant ',responseJson);
+ 
     if (responseJson.hasOwnProperty('output') && responseJson.output.hasOwnProperty('action') && responseJson.output.action.hasOwnProperty('call_discovery')) {
       this.addMessage( { label: 'Discovery Result:', message: 'Great question. Here\'s what I found:', date: (new Date()).toLocaleTimeString()});
       this.formatDiscovery(responseJson.output.discoveryResults);
@@ -126,7 +123,8 @@ class App extends Component {
       const outputMessage = responseJson.output.text.filter(text => text).join('\n');
       const outputIntent = responseJson.intents[0] ? responseJson.intents[0]['intent'] : '';
       var hasLink=false;
-      console.log('response from Assistant ',responseJson);
+      this.RetreiveEntities(responseJson.entities);
+      // console.log('response from Assistant ',responseJson);
       if (outputMessage.indexOf('<a')!==-1){
         hasLink=true;
       }
@@ -150,10 +148,13 @@ class App extends Component {
         message: outputMessageWithLink,
         link: hasLink,
         date: outputDate,
-        // hasTail: true
       };
       this.addMessage(msgObj);
     }
+  }
+
+  RetreiveEntities(obj){
+    obj.forEach(function(obj) { console.log(obj.entity + obj.value); });
   }
 
   addMessage(msgObj) {
@@ -167,12 +168,10 @@ class App extends Component {
     if (typeof e ==='string')
     {
       console.log(e);
-      // e.target.value=e;
       inputMessage=e;
     }else{
      inputMessage =e.target.value;
     }
-   
     const inputDate = new Date();
     const formattedDate = inputDate.toLocaleTimeString();
     const msgObj = {
@@ -182,12 +181,9 @@ class App extends Component {
       hasTail: true
     };
     this.addMessage(msgObj);
-    // e.target.value= '';
     if (typeof e ==='string')
     {
       e='';
-      // e.target.value=e;
-
     }else{
       e.target.value='';
     }

@@ -9,12 +9,14 @@ import { ReactMic } from 'react-mic';
 
 
 function Conversation(props) {
+  console.log("MESSAGE OBJECT LIST: CONERSTATIONS ", props.messageObjectList)
 
   function makeMessage(msgObj, index) {
 
     if (typeof msgObj.message === 'string') {
       return (
-        <Message key={index} position={msgObj.position || false} label={msgObj.label || false} date={msgObj.date || false} message={msgObj.message} hasTail={msgObj.hasTail || false} link={msgObj.link || false}/>
+        <Message key={index} position={msgObj.position || false} label={msgObj.label || false} date={msgObj.date || false} message={msgObj.message} hasTail={msgObj.hasTail || false} link={msgObj.link || false} 
+        isLast={(index + 1) === props.messageObjectList.length}/>
       );
     } else if ( React.isValidElement(msgObj.message)) {
       return ( msgObj.message );
