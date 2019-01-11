@@ -58,8 +58,7 @@ class App extends Component {
         console.log(myBlob);
         let formData = new FormData(); 
         formData.append('audioFile', myBlob);
-        
-        
+      
         axios.post('http://localhost:5000/speechtotext', formData
         ).then(function(response){
           console.log('response from STT--  ',response.data);
@@ -68,12 +67,9 @@ class App extends Component {
         }).catch(function(error){
           console.log(error);
         })
-
       }
     };
     xhr.send();
-
-
   }
 
   onData(recordedBlob){
@@ -120,10 +116,10 @@ class App extends Component {
 
     } else {
       console.log('response from Assistant ',responseJson);
-      const outputMessage = responseJson.output.text.filter(text => text).join('\n');
+      var outputMessage = responseJson.output.text.filter(text => text).join('\n');
       const outputIntent = responseJson.intents[0] ? responseJson.intents[0]['intent'] : '';
       var hasLink=false;
-      this.RetreiveEntities(responseJson.entities);
+      outputMessage=outputMessage +'  '+ this.RetreiveEntities(responseJson.entities);
       // console.log('response from Assistant ',responseJson);
       if (outputMessage.indexOf('<a')!==-1){
         hasLink=true;
@@ -152,11 +148,32 @@ class App extends Component {
       this.addMessage(msgObj);
     }
   }
-
+  //extract entities from the response and create a searchable link
   RetreiveEntities(obj){
-    obj.forEach(function(obj) { console.log(obj.entity + obj.value); });
+   var AppURL='graana.com/search?';
+   var count =1;
+
+    obj.forEach(function(obj) { 
+      console.log(obj.entity +'=' +obj.value);
+      if(count!==1){ 
+        AppURL= AppURL+'&'+obj.entity +'=' +obj.value;
+      }else{
+        AppURL= AppURL+''+obj.entity +'=' +obj.value;
+        count++;
+      }
+    });
+    console.log('Search URL : ' + AppURL);
+    return AppURL;
   }
 
+  // concatSearchKeywords(entity){
+  //   this.setState({
+  //     AppURL:this.state.AppURL+'&'+entity
+  //   });
+  //   console.log('Search URL : ' + this.state.AppURL);
+  // }
+
+  //adds message to
   addMessage(msgObj) {
     this.setState({
       messageObjectList: [ ...this.state.messageObjectList , msgObj]

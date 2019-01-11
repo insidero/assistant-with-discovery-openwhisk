@@ -44,6 +44,7 @@ function Conversation(props) {
             onStart={props.onStart}
             onSave={props.onSave}
             height="100"
+            
       />
           <br />
           <FloatingActionButton

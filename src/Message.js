@@ -43,7 +43,7 @@ return (
         </div>
       ) : false}
 
-   { props.link?( <div dangerouslySetInnerHTML={{__html: myLink}}/>):false}
+   {/* { props.link?( <div dangerouslySetInnerHTML={{__html: myLink}}/>):false} */}
       {/* {props.indexLinkStart? openInNewTab('https://graana.com'): false} */}
 
       {props.date ? <div className="message__date">{props.date}</div> : false}
