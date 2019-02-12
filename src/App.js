@@ -18,7 +18,8 @@ class App extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.callWatson('hello');
+    // this.callWatson('hello');
+    this.startRecording = this.startRecording.bind(this);
   }
 
   startRecording = () => {
@@ -34,37 +35,37 @@ class App extends Component {
     });
   }
 
-  onSave=(blobObject) => {
+  onSave = (blobObject) => {
   }
 
-  onStart=() => {
+  onStart = () => {
     console.log('You can tap into the onStart callback');
   }
 
-  onStop= (blobObject) => {
+  onStop = (blobObject) => {
     this.setState({
-      blobURL : blobObject.blobURL
+      blobURL: blobObject.blobURL
     });
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', blobObject.blobURL, true);
     xhr.responseType = 'blob';
     console.log(blobObject.blobURL);
-    var parentThis=this;
-    xhr.onload = function(e) {
+    var parentThis = this;
+    xhr.onload = function (e) {
       if (this.status === 200) {
         var myBlob = this.response;
         // myBlob is now the blob that the object URL pointed to.
         console.log(myBlob);
-        let formData = new FormData(); 
+        let formData = new FormData();
         formData.append('audioFile', myBlob);
-      
+
         axios.post('http://localhost:5000/speechtotext', formData
-        ).then(function(response){
-          console.log('response from STT--  ',response.data);
-          
-          parentThis.handleSubmit(''+response.data);
-        }).catch(function(error){
+        ).then(function (response) {
+          console.log('response from STT--  ', response.data);
+
+          parentThis.handleSubmit('' + response.data);
+        }).catch(function (error) {
           console.log(error);
         })
       }
@@ -72,7 +73,7 @@ class App extends Component {
     xhr.send();
   }
 
-  onData(recordedBlob){
+  onData(recordedBlob) {
     console.log('chunk of real-time data is: ', recordedBlob);
   }
   callWatson(message) {
@@ -102,27 +103,27 @@ class App extends Component {
       .then((responseJson) => {
         responseJson.date = new Date();
         this.handleResponse(responseJson);
-      }).catch(function(error) {
+      }).catch(function (error) {
         throw error;
       });
   }
 
   handleResponse(responseJson) {
- 
+
     if (responseJson.hasOwnProperty('output') && responseJson.output.hasOwnProperty('action') && responseJson.output.action.hasOwnProperty('call_discovery')) {
-      this.addMessage( { label: 'Discovery Result:', message: 'Great question. Here\'s what I found:', date: (new Date()).toLocaleTimeString()});
+      this.addMessage({ label: 'Discovery Result:', message: 'Great question. Here\'s what I found:', date: (new Date()).toLocaleTimeString() });
       this.formatDiscovery(responseJson.output.discoveryResults);
-      console.log('response from Assistant + Discovery ',responseJson);
+      console.log('response from Assistant + Discovery ', responseJson);
 
     } else {
-      console.log('response from Assistant ',responseJson);
+      console.log('response from Assistant ', responseJson);
       var outputMessage = responseJson.output.text.filter(text => text).join('\n');
       const outputIntent = responseJson.intents[0] ? responseJson.intents[0]['intent'] : '';
-      var hasLink=false;
-      outputMessage=outputMessage +'  '+ this.RetreiveEntities(responseJson.entities);
+      var hasLink = false;
+      outputMessage = outputMessage + '  ' + this.RetreiveEntities(responseJson.entities);
       // console.log('response from Assistant ',responseJson);
-      if (outputMessage.indexOf('<a')!==-1){
-        hasLink=true;
+      if (outputMessage.indexOf('<a') !== -1) {
+        hasLink = true;
       }
       // var hasLink=false;
       // if (outputIntent==='sale'){
@@ -149,16 +150,16 @@ class App extends Component {
     }
   }
   //extract entities from the response and create a searchable link
-  RetreiveEntities(obj){
-   var AppURL='graana.com/search?';
-   var count =1;
+  RetreiveEntities(obj) {
+    var AppURL = 'graana.com/search?';
+    var count = 1;
 
-    obj.forEach(function(obj) { 
-      console.log(obj.entity +'=' +obj.value);
-      if(count!==1){ 
-        AppURL= AppURL+'&'+obj.entity +'=' +obj.value;
-      }else{
-        AppURL= AppURL+''+obj.entity +'=' +obj.value;
+    obj.forEach(function (obj) {
+      console.log(obj.entity + '=' + obj.value);
+      if (count !== 1) {
+        AppURL = AppURL + '&' + obj.entity + '=' + obj.value;
+      } else {
+        AppURL = AppURL + '' + obj.entity + '=' + obj.value;
         count++;
       }
     });
@@ -176,18 +177,17 @@ class App extends Component {
   //adds message to
   addMessage(msgObj) {
     this.setState({
-      messageObjectList: [ ...this.state.messageObjectList , msgObj]
+      messageObjectList: [...this.state.messageObjectList, msgObj]
     });
   }
 
   handleSubmit(e) {
-    var inputMessage='';
-    if (typeof e ==='string')
-    {
+    var inputMessage = '';
+    if (typeof e === 'string') {
       console.log(e);
-      inputMessage=e;
-    }else{
-     inputMessage =e.target.value;
+      inputMessage = e;
+    } else {
+      inputMessage = e.target.value;
     }
     const inputDate = new Date();
     const formattedDate = inputDate.toLocaleTimeString();
@@ -198,17 +198,16 @@ class App extends Component {
       hasTail: true
     };
     this.addMessage(msgObj);
-    if (typeof e ==='string')
-    {
-      e='';
-    }else{
-      e.target.value='';
+    if (typeof e === 'string') {
+      e = '';
+    } else {
+      e.target.value = '';
     }
     this.callWatson(inputMessage);
   }
 
   formatDiscovery(resultArr) {
-    resultArr.map(function(result, index) {
+    resultArr.map(function (result, index) {
       const formattedResult = <DiscoveryResult key={'d' + this.state.discoveryNumber + index} title={result.title} preview={result.bodySnippet} link={result.sourceUrl} linkText={'See full manual entry'} />;
       this.addMessage({ message: formattedResult });
     }.bind(this));
@@ -228,23 +227,23 @@ class App extends Component {
     this.scrollToBottom();
   }
 
- render() {
-   console.log('STATE',this.state);
+  render() {
+    console.log('STATE', this.state);
     return (
       <div className="app-wrapper">
-        
+
         <Conversation
           onSubmit={this.handleSubmit}
           messageObjectList={this.state.messageObjectList}
           startRecording={this.startRecording}
           stopRecording={this.stopRecording}
-        //  onStop={this.onStop}
-         onStop={this.onStop}
-         onStart={this.onStart}
-         onSave={this.onSave}
-         onData={this.onData}
+          //  onStop={this.onStop}
+          onStop={this.onStop}
+          onStart={this.onStart}
+          onSave={this.onSave}
+          onData={this.onData}
 
-        isRecording={this.state.isRecording}
+          isRecording={this.state.isRecording}
         />
       </div>
     );
